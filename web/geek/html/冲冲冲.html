@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .button .btn-speedUp .btn-speedDown {
+            margin: 100px auto;
+        }
+
+        .bike {
+            width: 130px;
+            height: 130px;
+            background-image: url("../image/bike.png");
+            margin: 100px auto 0;
+            animation: bike 0.1s steps(31) infinite;
+        }
+
+        @keyframes bike {
+            from {
+            }
+
+            to {
+                background-position: 0 -4030px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="bike"></div>
+
+<span class="button">
+    <button class="btn-speedUp">加速</button>
+    <button class="btn-speedDown">减速</button>
+</span>
+
+
+<script>
+    const speedUp = document.querySelector('.btn-speedUp');
+    const speedDown = document.querySelector('.btn-speedDown');
+    const bike = document.querySelector('.bike');
+
+    // 速度。
+    let velocity = 0.5;
+
+    speedUp.addEventListener('click', () => {
+        if (velocity <= 0.1) {
+            velocity = 0.1
+        } else {
+            velocity -= 0.1
+        }
+        bike.style.animationDuration = velocity + 's'
+    })
+
+    speedDown.addEventListener('click', () => {
+        velocity += 0.1
+        bike.style.animationDuration = velocity + 's'
+    })
+
+</script>
+
+
+</body>
+
+</html>

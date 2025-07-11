@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .date,
+        .leave,
+        .weekend,
+        .tips {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .now-date,
+        .week,
+        .now-time,
+        .didi {
+            font-size: 1.3rem;
+            color: #34495e;
+            margin: 0.8rem 0;
+            letter-spacing: 1px;
+        }
+
+        i {
+            margin: 0 0.3rem;
+            color: #7f8c8d;
+        }
+
+        #leaveTimeInput {
+            padding: 0.5rem 1rem;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            transition: border-color 0.3s ease;
+        }
+
+        #leaveTimeInput:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .geek-tag {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-top: 1.5rem;
+        }
+
+        .time-display {
+            background-color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .time-display span {
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        .time-display i {
+            color: #7f8c8d;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="time-display">
+            <p class="date">now</p>
+            <p class="now-date">
+                <span id="now_year">00</span>
+                <i>-</i>
+                <span id="now_month">00</span>
+                <i>-</i>
+                <span id="now_day">00</span>
+            </p>
+            <p class="week">星期<span id="week"></span></p>
+            <p class="now-time">
+                <span id="now_hour">00</span>
+                <i>:</i>
+                <span id="now_minute">00</span>
+                <i>:</i>
+                <span id="now_second">00</span>
+            </p>
+        </div>
+        <p class="leave">下班倒计时</p>
+        <p class="didi">
+            <span id="left_hour">00</span>
+            <i>:</i>
+            <span id="left_minute">00</span>
+            <i>:</i>
+            <span id="left_second">00</span>
+        </p>
+        <p class="weekend">周末倒计时</p>
+        <p class="didi">
+            <span id="weekend_left_hour">00</span>
+            <i>:</i>
+            <span id="weekend_left_minute">00</span>
+            <i>:</i>
+            <span id="weekend_left_second">00</span>
+        </p>
+        <p class="tips">
+            下班时间：
+        <p>
+            <label for="leaveTimeInput"></label><input type="time" id="leaveTimeInput" value="18:00">
+        </p>
+        <p class="geek-tag">Geek 出品，必属精品。</p>
+    </div>
+
+
+    <script>
+        // 展示实时时间和每天下班倒计时和到周末倒计时。
+        // 获取页面元素
+        const nowYear = document.getElementById('now_year');
+        const nowMonth = document.getElementById('now_month');
+        const nowDay = document.getElementById('now_day');
+        const week = document.getElementById('week');
+        const nowHour = document.getElementById('now_hour');
+        const nowMinute = document.getElementById('now_minute');
+        const nowSecond = document.getElementById('now_second');
+        const leftHour = document.getElementById('left_hour');
+        const leftMinute = document.getElementById('left_minute');
+        const leftSecond = document.getElementById('left_second');
+        const weekendLeftHour = document.getElementById('weekend_left_hour');
+        const weekendLeftMinute = document.getElementById('weekend_left_minute');
+        const weekendLeftSecond = document.getElementById('weekend_left_second');
+        const leaveTimeInput = document.getElementById('leaveTimeInput');
+
+        // 更新时间和倒计时的函数
+        function updateTime() {
+            const now = new Date();
+            // 显示当前时间
+            nowYear.textContent = String(now.getFullYear()).padStart(2, '0');
+            nowMonth.textContent = String(now.getMonth() + 1).padStart(2, '0');
+            nowDay.textContent = String(now.getDate()).padStart(2, '0');
+            week.textContent = ['日', '一', '二', '三', '四', '五', '六'][now.getDay()];
+            nowHour.textContent = String(now.getHours()).padStart(2, '0');
+            nowMinute.textContent = String(now.getMinutes()).padStart(2, '0');
+            nowSecond.textContent = String(now.getSeconds()).padStart(2, '0');
+
+            // 从输入框获取下班时间
+            const [hours, minutes] = leaveTimeInput.value.split(':');
+            const leaveTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+            let remainingTime = leaveTime - now;
+            if (remainingTime < 0) {
+                remainingTime = 0;
+            }
+            const workHours = Math.floor(remainingTime / (1000 * 60 * 60));
+            const workMinutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const workSeconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+            // 显示下班倒计时
+            leftHour.textContent = String(workHours).padStart(2, '0');
+            leftMinute.textContent = String(workMinutes).padStart(2, '0');
+            leftSecond.textContent = String(workSeconds).padStart(2, '0');
+
+            // 计算周末时间（每周五 18:00）
+            let daysUntilWeekend = 5 - now.getDay();
+            if (daysUntilWeekend < 0) {
+                daysUntilWeekend += 7;
+            } else if (daysUntilWeekend === 0 && now.getHours() >= 18) {
+                daysUntilWeekend += 7;
+            }
+            const weekendTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysUntilWeekend, 18, 0, 0);
+
+            let weekendRemainingTime = weekendTime - now;
+            if (weekendRemainingTime < 0) {
+                weekendRemainingTime = 0;
+            }
+            const weekendHours = Math.floor(weekendRemainingTime / (1000 * 60 * 60));
+            const weekendMinutes = Math.floor((weekendRemainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const weekendSeconds = Math.floor((weekendRemainingTime % (1000 * 60)) / 1000);
+
+            // 显示周末倒计时
+            weekendLeftHour.textContent = String(weekendHours).padStart(2, '0');
+            weekendLeftMinute.textContent = String(weekendMinutes).padStart(2, '0');
+            weekendLeftSecond.textContent = String(weekendSeconds).padStart(2, '0');
+        }
+
+        // 初始调用一次
+        updateTime();
+        // 每秒更新一次
+        setInterval(updateTime, 1000);
+    </script>
+
+
+</body>
+
+</html>
